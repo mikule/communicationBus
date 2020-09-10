@@ -5,8 +5,42 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WebClient"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="WebClient" Height="524" Width="874">
     <Grid>
-        
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="349*"/>
+            <ColumnDefinition Width="517*"/>
+        </Grid.ColumnDefinitions>
+        <Path  Stroke="White" StrokeThickness="2"  Name="UIPath" Stretch="Fill" Fill="Black" RenderTransformOrigin="0.5,0.5" Margin="2.008,1.973,-0.794,-1.35" Grid.ColumnSpan="2">
+            <Path.RenderTransform>
+                <TransformGroup>
+                    <ScaleTransform/>
+                    <SkewTransform/>
+                    <RotateTransform Angle="-0.039"/>
+                    <TranslateTransform/>
+                </TransformGroup>
+            </Path.RenderTransform>
+            <Path.Data>
+                <PathGeometry>
+                    <PathFigure StartPoint="50,0">
+                        <ArcSegment Size="50,50" RotationAngle="180" IsLargeArc="False"
+                                    SweepDirection="CounterClockwise" Point="0,50" />
+                        <LineSegment Point="0,50"/>
+                        <LineSegment Point="0,350"/>
+                        <LineSegment Point="500,350"/>
+                        <ArcSegment Size="50,50" RotationAngle="180" IsLargeArc="False"
+                                    SweepDirection="CounterClockwise" Point="550,300" />
+                        <LineSegment Point="550,0"/>
+                        <LineSegment Point="50,0"/>
+                    </PathFigure>
+                </PathGeometry>
+            </Path.Data>
+        </Path>
+        <Button x:Name="SendButton" Content="Send request&#xD;&#xA;" HorizontalAlignment="Center" Height="46" Margin="402,58,10,0" VerticalAlignment="Top" Width="105" Click="ConvertToJson" TextOptions.TextHintingMode="Fixed" Background="#FFE2086B" FontFamily="Georgia" FontSize="14" BorderBrush="#FFE331FF" Foreground="White" FontWeight="Bold" Grid.Column="1"/>
+        <TextBox x:Name="JsonFormat" HorizontalAlignment="Left" Height="204" Margin="70,210,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="679" FontSize="16" Grid.ColumnSpan="2"/>
+        <Label Content="JSON format" HorizontalAlignment="Left" Height="36" Margin="70,184,0,0" VerticalAlignment="Top" Width="179" FontSize="16" FontFamily="Georgia" Foreground="#FFFDEEEE"/>
+        <Label Content="Enter request" HorizontalAlignment="Left" Margin="70,32,0,0" VerticalAlignment="Top" Width="107" FontFamily="Georgia" Foreground="#FFFDFDFD" FontSize="16"/>
+        <TextBox x:Name="TextBoxEnter" HorizontalAlignment="Left" Height="46" Margin="70,60,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="634" FontFamily="Georgia" FontSize="16" Grid.ColumnSpan="2" />
+        <Label Content="Label" HorizontalAlignment="Left" Margin="39,98,0,0" VerticalAlignment="Top" Grid.Column="1"/>
     </Grid>
 </Window>
