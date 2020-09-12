@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Xml.Linq;
 using Newtonsoft.Json; // Nuget Package
 
 
@@ -24,66 +25,47 @@ namespace WebClient
     {
         public MainWindow()
         {
-                       
-            InitializeComponent();           
+
+            InitializeComponent();
         }
 
-        
 
-        private void ConvertToJson(object sender, RoutedEventArgs e)
+        private void Button_Click(object sender, RoutedEventArgs e)
         {
-
-          
-                string text = TextBoxEnter.Text.ToString();
-                string[] partsOfRequest = text.Split('/');
-                if (partsOfRequest[0] == "GET")
-                {
-                }
-                else if (partsOfRequest[0] == "POST")
-                {
-                }
-                else if (partsOfRequest[0] == "PATCH")
-                {
-                }
-                else if (partsOfRequest[0] == "DELETE")
-                {
-                }
-                else
-                {
-                    MessageBox.Show("Request is not well formated", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                  
-                }
-
-                Request request = new Request();
-                request.Verb = partsOfRequest[0];
-                request.Noun = partsOfRequest[1];
-                
-            /*
-            if (partsOfRequest[2] != null)
+            Response response = new Response();
+            ValidationOfRequest validation = new ValidationOfRequest();
+            if (validation.ValidateRequest(TextBoxEnter.Text) == true)
             {
-              //  string[] query = partsOfRequest[2].Split('&');
-                string[] name = partsOfRequest[2].Split('=');
-                request.Query.Name = name[1];
-                //string[] id = query[1].Split('=');
-                //request.Query.Id = id[1];
-            }
 
-    */
+                Request request = RequestFactory.ConvertStringToRequest(TextBoxEnter.Text);
 
                 try
                 {
-                    string json = JsonConvert.SerializeObject(request);
+                    string json = JsonConvert.SerializeObject(request, Formatting.Indented);
+                    XNode node = JsonConvert.DeserializeXNode(json, "Request");
                     JsonFormat.Text = json;
+                    XmlFormat.Text = node.ToString();
+                    response.Status = Status.SUCCESS;
+                    response.StatusCode = 2000;
+                    response.Payload = "";
+                    Response.Text = "STATUS: " + response.Status + "\n" + "STATUS CODE: " + response.StatusCode + "\n" + "PAYLOAD: " + response.Payload;
+
                 }
-                catch(Exception exception)
+
+                catch (Exception exception)
                 {
                     MessageBox.Show(exception.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-
                 }
-
-            
+            }
+            else
+            {
+                response.Status = Status.BAD_FORMAT;
+                response.StatusCode = 5000;
+                response.Payload = "";
+                Response.Text = "STATUS: " + response.Status + "\n" + "STATUS CODE: " + response.StatusCode + "\n" + "PAYLOAD: " + response.Payload;
+                return;
+            }
         }
-
-     
     }
 }
+
