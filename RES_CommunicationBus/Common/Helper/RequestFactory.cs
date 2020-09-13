@@ -1,11 +1,12 @@
-﻿using System;
+﻿using Common.CommunicationModel;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 
-namespace WebClient
+namespace Common.Helper
 {
     public static class RequestFactory
     {

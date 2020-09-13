@@ -59,13 +59,6 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Fields.cs" />
-    <Compile Include="Query.cs" />
-    <Compile Include="Request.cs" />
-    <Compile Include="RequestFactory.cs" />
-    <Compile Include="Response.cs" />
-    <Compile Include="Status.cs" />
-    <Compile Include="ValidationOfRequest.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

@@ -4,12 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace WebClient
+namespace Common.CommunicationBus
 {
-    public enum Status
+    public class JsonToXML
     {
-        REJECTED,
-        BAD_FORMAT,
-        SUCCESS
+
     }
 }

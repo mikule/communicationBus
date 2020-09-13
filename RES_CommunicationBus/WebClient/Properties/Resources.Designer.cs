@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace WebClient.Properties {
+namespace Common.Properties {
     using System;
     
     
