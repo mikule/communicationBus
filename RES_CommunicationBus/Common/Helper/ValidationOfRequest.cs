@@ -16,25 +16,28 @@ namespace Common.Helpers
                 
                 if (partsOfRequest[0] == "GET")
                 {
+                    
                 }
                 else if (partsOfRequest[0] == "POST")
                 {
+
                 }
                 else if (partsOfRequest[0] == "PATCH")
                 {
+
                 }
                 else if (partsOfRequest[0] == "DELETE")
                 {
+
                 }
                 else
                 {
                     return false;
                 }
                 return true;
-
             }
         }
-              
+
         public ValidationOfRequest()
         {
         }

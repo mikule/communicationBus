@@ -24,7 +24,7 @@ namespace Common.CommunicationBus
             XmlToSql xmlToSql = new XmlToSql();
             string sqlQuery = xmlToSql.Convert(node);
             //CRUD execution
-
+            
             //DBAtoXML
             //xmlToJSON
 
