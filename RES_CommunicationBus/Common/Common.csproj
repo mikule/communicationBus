@@ -47,6 +47,7 @@
   <ItemGroup>
     <Compile Include="CommunicationBus\CommunicationBusModule.cs" />
     <Compile Include="CommunicationBus\JsonToXML.cs" />
+    <Compile Include="CommunicationBus\XmlToSql.cs" />
     <Compile Include="Helper\RequestFactory.cs" />
     <Compile Include="Helper\ValidationOfRequest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -19,7 +19,6 @@ namespace Common.Helper
             request.Noun = partsOfRequest[1] +"/"+ partsOfRequest[2];
 
             return request;
-
         }
     }
 }

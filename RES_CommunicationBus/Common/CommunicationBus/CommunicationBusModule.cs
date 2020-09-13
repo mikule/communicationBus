@@ -17,15 +17,20 @@ namespace Common.CommunicationBus
 
         public Response SendRequest(string jsonRequest)
         {
-            Response retVal = new Response(EStatus.SUCCESS, (int)EStatus.SUCCESS, "database object");
 
             //jsonToXML
-            XNode node = JsonConvert.DeserializeXNode(jsonRequest);
+            XNode node = JsonConvert.DeserializeXNode(jsonRequest, "Request");
             //XMLtoDBA
+            XmlToSql xmlToSql = new XmlToSql();
+            string sqlQuery = xmlToSql.Convert(node);
             //CRUD execution
+
             //DBAtoXML
             //xmlToJSON
 
+
+
+            Response retVal = new Response(EStatus.SUCCESS, (int)EStatus.SUCCESS, "database object");
             return retVal;
         }
     }
