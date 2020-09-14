@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -18,6 +19,7 @@ using Common.CommunicationBus;
 using Common.CommunicationModel;
 using Common.Helper;
 using Common.Helpers;
+using ModelPodataka.DataModel;
 using Newtonsoft.Json; // Nuget Package
 
 
@@ -32,6 +34,12 @@ namespace WebClient
         {
 
             InitializeComponent();
+
+            Resource r = new Resource(1, "resurs", "opis resursa", null);
+            CommunicationBus_DbContext context = new CommunicationBus_DbContext();
+            context.Resources.Add(r);
+            context.SaveChanges();
+
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
