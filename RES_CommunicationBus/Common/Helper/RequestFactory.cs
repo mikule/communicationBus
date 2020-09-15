@@ -8,7 +8,7 @@ using System.Windows;
 
 namespace Common.Helper
 {
-    public static class RequestFactory
+    public class RequestFactory
     {
         public static Request ConvertStringToRequest(string stringRequest)
         {
