@@ -1,4 +1,5 @@
 ﻿using Common.CommunicationModel;
+using Common.Repository;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -11,27 +12,24 @@ namespace Common.CommunicationBus
 {
     public class CommunicationBusModule
     {
+        public XNode XmlRequest;
         public CommunicationBusModule()
         {
+            XmlRequest = null;
         }
 
-        public Response SendRequest(string jsonRequest)
+        public string SendRequest(string jsonRequest)
         {
-
-            //jsonToXML
-            XNode node = JsonConvert.DeserializeXNode(jsonRequest, "Request");
-            //XMLtoDBA
+            XmlRequest = JsonConvert.DeserializeXNode(jsonRequest, "Request");
             XmlToSql xmlToSql = new XmlToSql();
-            string sqlQuery = xmlToSql.Convert(node);
-            //CRUD execution
-            
-            //DBAtoXML
-            //xmlToJSON
+            string sqlQuery = xmlToSql.Convert(XmlRequest);
+            SqlQueryExecutor sqlQueryExecutor = new SqlQueryExecutor();
+            var xmlResponse = sqlQueryExecutor.ExecuteSqlQuery(sqlQuery);
 
+            xmlResponse.RemoveChild(xmlResponse.ChildNodes[0]);
+            //xmlResponse.RemoveChild(xmlResponse.ChildNodes[1]);
 
-
-            Response retVal = new Response(EStatus.SUCCESS, (int)EStatus.SUCCESS, "database object");
-            return retVal;
+            return JsonConvert.SerializeXmlNode(xmlResponse, Formatting.Indented);
         }
     }
 }

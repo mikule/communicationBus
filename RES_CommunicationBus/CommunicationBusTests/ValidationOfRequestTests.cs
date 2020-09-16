@@ -8,7 +8,7 @@ using Common.Helpers;
 
 namespace CommunicationBusTests
 {
-    /*
+
     [TestClass]
     class ValidationOfRequestTests
     {
@@ -22,7 +22,7 @@ namespace CommunicationBusTests
 
             Assert.IsTrue(result);
         }
-        */
 
     }
+}
 

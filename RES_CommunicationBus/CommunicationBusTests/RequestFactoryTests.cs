@@ -17,7 +17,7 @@ namespace CommunicationBusTests
             Request request = RequestFactory.ConvertStringToRequest(stringRequest);
 
             Assert.IsNotNull(request);
-
+            Assert.AreEqual(request.Verb, "GET");
         }
 
         [TestMethod]
@@ -31,5 +31,16 @@ namespace CommunicationBusTests
             Assert.IsTrue(result);
         }
 
+
+        [TestMethod]
+        public void ValidateRequest_PassTheCheck_ReturnFalse()
+        {
+            string stringRequest = "POSfsdghT/resurs/1";
+            var validation = new ValidationOfRequest();
+
+            var result = validation.ValidateRequest(stringRequest);
+
+            Assert.IsFalse(result);
+        }
     }
 }

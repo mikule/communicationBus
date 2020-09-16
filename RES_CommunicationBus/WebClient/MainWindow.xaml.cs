@@ -32,14 +32,7 @@ namespace WebClient
     {
         public MainWindow()
         {
-
             InitializeComponent();
-
-            Resource r = new Resource(1, "resurs", "opis resursa", null);
-            CommunicationBus_DbContext context = new CommunicationBus_DbContext();
-            context.Resources.Add(r);
-            context.SaveChanges();
-
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
@@ -53,28 +46,12 @@ namespace WebClient
 
             Request request = RequestFactory.ConvertStringToRequest(TextBoxEnter.Text);
             string json = JsonConvert.SerializeObject(request, Formatting.Indented);
+            JsonFormat.Text = json;
             CommunicationBusModule cmb = new CommunicationBusModule();
-            Response response = cmb.SendRequest(json);
-            
-            txtBoxResponse.Text = "STATUS: " + response.Status + "\n" + "STATUS CODE: " + response.StatusCode + "\n" + "PAYLOAD: " + response.Payload;
+            string response = cmb.SendRequest(json);
+            XmlFormat.Text = cmb.XmlRequest.ToString();
 
-            //try
-            //{
-            //    string json = JsonConvert.SerializeObject(request, Formatting.Indented);
-            //    XNode node = JsonConvert.DeserializeXNode(json, "Request");
-            //    JsonFormat.Text = json;
-            //    XmlFormat.Text = node.ToString();
-            //    response.Status = EStatus.SUCCESS;
-            //    response.StatusCode = 2000;
-            //    response.Payload = "";
-            //    Response.Text = "STATUS: " + response.Status + "\n" + "STATUS CODE: " + response.StatusCode + "\n" + "PAYLOAD: " + response.Payload;
-
-            //}
-
-            //catch (Exception exception)
-            //{
-            //    MessageBox.Show(exception.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-            //} 
+            txtBoxResponse.Text = response;
         }
     }
 }

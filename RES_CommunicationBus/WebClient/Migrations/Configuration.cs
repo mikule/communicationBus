@@ -5,14 +5,14 @@
     using System.Data.Entity.Migrations;
     using System.Linq;
 
-    internal sealed class Configuration : DbMigrationsConfiguration<WebClient.CommunicationBus_DbContext>
+    internal sealed class Configuration : DbMigrationsConfiguration<Common.Repository.CommunicationBus_DbContext>
     {
         public Configuration()
         {
             AutomaticMigrationsEnabled = false;
         }
 
-        protected override void Seed(WebClient.CommunicationBus_DbContext context)
+        protected override void Seed(Common.Repository.CommunicationBus_DbContext context)
         {
             //  This method will be called after migrating to the latest version.
 

@@ -10,10 +10,10 @@ namespace Common.Repository
 {
     public class CommunicationBus_DbContext : DbContext
     {
-        DbSet<Relation> Relations { get; set; }
-        DbSet<RelationType> RelationTypes { get; set; }
-        DbSet<Resource> Resources { get; set; }
-        DbSet<ResourceType> ResourceTypes { get; set; }
+        public DbSet<Relation> Relations { get; set; }
+        public DbSet<RelationType> RelationTypes { get; set; }
+        public DbSet<Resource> Resources { get; set; }
+        public DbSet<ResourceType> ResourceTypes { get; set; }
 
         public CommunicationBus_DbContext() : base("CommunicationBusDB")
         {

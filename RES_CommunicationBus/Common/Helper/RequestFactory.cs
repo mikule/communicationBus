@@ -12,7 +12,6 @@ namespace Common.Helper
     {
         public static Request ConvertStringToRequest(string stringRequest)
         {
-
             string[] partsOfRequest = stringRequest.Split('/');
             Request request = new Request();
             request.Verb = partsOfRequest[0];
