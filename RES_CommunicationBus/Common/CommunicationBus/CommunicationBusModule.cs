@@ -12,10 +12,17 @@ namespace Common.CommunicationBus
 {
     public class CommunicationBusModule
     {
-        public XNode XmlRequest;
+        private XNode XmlRequest;
+        private ISqlQueryExecutor sqlQueryExecutor;
         public CommunicationBusModule()
         {
             XmlRequest = null;
+            sqlQueryExecutor = new SqlQueryExecutor();
+        }
+
+        public CommunicationBusModule(ISqlQueryExecutor sqe)
+        {
+            sqlQueryExecutor = sqe;
         }
 
         public string SendRequest(string jsonRequest)
@@ -23,11 +30,7 @@ namespace Common.CommunicationBus
             XmlRequest = JsonConvert.DeserializeXNode(jsonRequest, "Request");
             XmlToSql xmlToSql = new XmlToSql();
             string sqlQuery = xmlToSql.Convert(XmlRequest);
-            SqlQueryExecutor sqlQueryExecutor = new SqlQueryExecutor();
             var xmlResponse = sqlQueryExecutor.ExecuteSqlQuery(sqlQuery);
-
-            xmlResponse.RemoveChild(xmlResponse.ChildNodes[0]);
-            //xmlResponse.RemoveChild(xmlResponse.ChildNodes[1]);
 
             return JsonConvert.SerializeXmlNode(xmlResponse, Formatting.Indented);
         }

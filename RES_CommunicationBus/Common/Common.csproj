@@ -61,6 +61,7 @@
     <Compile Include="CommunicationBus\XmlToSql.cs" />
     <Compile Include="Helper\RequestFactory.cs" />
     <Compile Include="Helper\ValidationOfRequest.cs" />
+    <Compile Include="Mocks\SqlExecutorMock.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="DataModel\Resource.cs" />
     <Compile Include="DataModel\ResourceType.cs" />
@@ -70,6 +71,7 @@
     <Compile Include="CommunicationModel\Response.cs" />
     <Compile Include="CommunicationModel\EStatus.cs" />
     <Compile Include="Repository\CommunicationBus_DbContext.cs" />
+    <Compile Include="Repository\ISqlQueryExecutor.cs" />
     <Compile Include="Repository\SqlQueryExecutor.cs" />
   </ItemGroup>
   <ItemGroup />

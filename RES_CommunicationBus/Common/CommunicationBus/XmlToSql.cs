@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity.Core.Common.CommandTrees;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -38,102 +39,89 @@ namespace Common.CommunicationBus
             return "";
         }
 
+        //GET/Resources//Name='Petar';Description='opis'/Name;Description
+        //GET/Resources//Name='Petar';Description='opis'"
+        //GET/Resources/1
         private string GenerateGetSQL(XElement request)
         {
             string sqlQuery = "";
             string noun = request.Element("Noun").Value;
             string query = request.Element("Query").Value;
             string fields = request.Element("Fields").Value;
-            string[] nounParts = noun.Split('/');
-            sqlQuery = "SELECT ";
-            if (String.IsNullOrEmpty(fields))
+
+            if (string.IsNullOrEmpty(fields))
             {
-                sqlQuery = sqlQuery + " * ";
+                fields = "*";
             }
             else
             {
-                sqlQuery = sqlQuery + fields;
+                fields = fields.Replace(";", ",");
             }
-            sqlQuery += " FROM " + nounParts[0];
 
-            if (nounParts.Length >= 2 && !String.IsNullOrEmpty(nounParts[1]))
+            string[] nounParts = noun.Split('/');
+            sqlQuery = $"SELECT {fields} FROM {nounParts[0]} WHERE ";
+            if(!string.IsNullOrEmpty(nounParts[1]))
             {
-                sqlQuery += " WHERE Id = " + nounParts[1];
+                sqlQuery += $"Id = {nounParts[1]}";
             }
 
-            query.Replace("&", " and ");
-            if (!String.IsNullOrEmpty(query))
+            if (string.IsNullOrEmpty(query))
             {
-                if (nounParts.Length >= 2 && !String.IsNullOrEmpty(nounParts[1]))
-                {
-                    sqlQuery += " AND ";
-                }
-                else
-                {
-                    sqlQuery += " WHERE ";
-                }
-                sqlQuery += query;
+                query = "";
+            }
+            else if(!noun.Contains("Id"))
+            {
+                query = query.Replace(";", " and ");
+            }
+            else
+            {
+                query = " and " + query.Replace(";", " and ");
             }
 
-            sqlQuery += ";";
+            sqlQuery += $"{query};";
+
             return sqlQuery;
         }
 
+        //POST/Resources//Name;Description/'Milan';'Description'
         private string GeneratePostSQL(XElement request)
         {
-            string noun = request.Element("Noun").Value;
-            noun = noun.Substring(1);
-            string columns = "";
-            string values = "";
-            int i = 0;
+            string sqlQuery = "";
+            string noun = request.Element("Noun").Value.Split('/')[0];
             string query = request.Element("Query").Value;
-            string[] queryParts = query.Split(';');
-            string[] columnParts;
+            string fields = request.Element("Fields").Value;
 
-            foreach (string part in queryParts)
-            {
-                if (columns != "")
-                {
-                    columns = columns + ",";
-                    values = columns + ",";
-                }
-                columnParts = part.Split('=');
-                columns = columns + columnParts[0];
-                values = values + columnParts[1];
-                i++;
-            }
+            sqlQuery = $"INSERT Into {noun} ({query.Replace(";", ", ")}) VALUES ({fields.Replace(";", ", ")});";
 
-            return $"INSERT INTO {noun} ({columns}) VALUES ({values});";
+            return sqlQuery;
         }
-        
+
+        //"PATCH/Resources//Name='Milan'/Name='Marko'"
         private string GeneratePatchSQL(XElement request)
-        { 
-            string noun = request.Element("Noun").Value.Substring(1);
+        {
+            string sqlQuery = "";
+            string noun = request.Element("Noun").Value.Split('/')[0];
             string query = request.Element("Query").Value;
-            string fields = request.Element("Fields").Value.Replace(";", ",");
+            string fields = request.Element("Fields").Value;
             string[] nounSplited = noun.Split('/');
 
-            string sqlRequest = "";
-            sqlRequest = "UPDATE " + nounSplited[0] + " SET " + fields + " WHERE Id=" + nounSplited[1] + " ";
-            if (query != null)
-            {
-                query = query.Replace("&", " AND ");
-                sqlRequest += " AND " + query;
-            }
-            sqlRequest = sqlRequest + ";";
-            return sqlRequest;
+            sqlQuery = $"UPDATE {nounSplited[0]} SET {fields.Replace(";", ",")} WHERE {query.Replace(";", " and ")};";
+            
+            return sqlQuery;
         }
 
+        //DELETE/Resources//Name='Milan';Description='opis'
         private string GenerateDeleteSQL(XElement request)
         {
-            string sqlRequest = "";
-            string noun = request.Element("Noun").Value;
+            string sqlQuery = "";
+            string noun = request.Element("Noun").Value.Split('/')[0];
+            string query = request.Element("Query").Value;
+            string fields = request.Element("Fields").Value;
+            string[] nounSplited = noun.Split('/');
 
-            noun = noun.Substring(1);
-            string[] NounSplited = noun.Split('/');
-            sqlRequest = "DELETE FROM " + NounSplited[0] + " WHERE Id=" + NounSplited[1] + ";";
+            sqlQuery = $"DELETE FROM {nounSplited[0]} WHERE {query.Replace(";", " and ")};";
 
-            return sqlRequest;
+            return sqlQuery;
         }
     }
 }

@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 
-namespace Common.Helper
+namespace Common.Helpers
 {
     public class RequestFactory
     {
@@ -16,7 +16,14 @@ namespace Common.Helper
             Request request = new Request();
             request.Verb = partsOfRequest[0];
             request.Noun = partsOfRequest[1] +"/"+ partsOfRequest[2];
-
+            if(partsOfRequest.Length >= 4)
+            {
+                request.Query = partsOfRequest[3];
+            }
+            if (partsOfRequest.Length >= 5)
+            {
+                request.Fields = partsOfRequest[4];
+            }
             return request;
         }
     }

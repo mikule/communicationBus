@@ -2,6 +2,7 @@
 using ModelPodataka.DataModel;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -12,23 +13,28 @@ using System.Xml.Serialization;
 
 namespace Common.Repository
 {
-    public class SqlQueryExecutor
+    public class SqlQueryExecutor : ISqlQueryExecutor
     {
         public SqlQueryExecutor()
         {
-            
+            context = new CommunicationBus_DbContext();
+        }
+        private CommunicationBus_DbContext context;
+        public SqlQueryExecutor(CommunicationBus_DbContext context)
+        {
+            this.context = context;
         }
 
         ~SqlQueryExecutor()
         {
-            
+            context.Dispose();
         }
         public XmlDocument ExecuteSqlQuery(string sql)
         {
             Response responseModel = new Response();
-            using (CommunicationBus_DbContext context = new CommunicationBus_DbContext())
+            try
             {
-                if (sql.Contains("Resource"))
+                if (sql.Contains("SELECT") && sql.Contains("Resource"))
                 {
                     var response = context.Resources.SqlQuery(sql).ToList();
                     if (response != null)
@@ -44,60 +50,75 @@ namespace Common.Repository
                         response.ForEach(x => responseModel.Payload += x.ToString() + "\n");
                     }
                 }
-                else if(sql.Contains("Relation"))
+                else if (sql.Contains("SELECT") && sql.Contains("Relation"))
                 {
-                    var response = context.Relations.SqlQuery(sql);
+                    var response = context.Relations.SqlQuery(sql).ToList();
                     if (response != null)
                     {
                         responseModel.Status = EStatus.SUCCESS;
                         responseModel.StatusCode = (double)EStatus.SUCCESS;
-                        //responseModel.Payload = response;
+                        response.ForEach(x => responseModel.Payload += x.ToString() + "\n");
                     }
                     else
                     {
                         responseModel.Status = EStatus.REJECTED;
                         responseModel.StatusCode = (double)EStatus.REJECTED;
-                        //responseModel.Payload = response;
+
                     }
                 }
-                else if(sql.Contains("RelationType"))
+                else if (sql.Contains("SELECT") && sql.Contains("RelationType"))
                 {
-                    var response = context.RelationTypes.SqlQuery(sql);
+                    var response = context.RelationTypes.SqlQuery(sql).ToList();
                     if (response != null)
                     {
                         responseModel.Status = EStatus.SUCCESS;
                         responseModel.StatusCode = (double)EStatus.SUCCESS;
-                        //responseModel.Payload = response;
+                        response.ForEach(x => responseModel.Payload += x.ToString() + "\n");
                     }
                     else
                     {
                         responseModel.Status = EStatus.REJECTED;
                         responseModel.StatusCode = (double)EStatus.REJECTED;
-                       // responseModel.Payload = response;
+                        // responseModel.Payload = response;
                     }
                 }
-                else if(sql.Contains("ResourceType"))
+                else if (sql.Contains("SELECT") && sql.Contains("ResourceType"))
                 {
-                    var response = context.ResourceTypes.SqlQuery(sql);
+                    var response = context.ResourceTypes.SqlQuery(sql).ToList();
                     if (response != null)
                     {
                         responseModel.Status = EStatus.SUCCESS;
                         responseModel.StatusCode = (double)EStatus.SUCCESS;
-                        //responseModel.Payload = response;
+                        response.ForEach(x => responseModel.Payload += x.ToString() + "\n");
                     }
                     else
                     {
                         responseModel.Status = EStatus.REJECTED;
                         responseModel.StatusCode = (double)EStatus.REJECTED;
-                        //responseModel.Payload = response;
                     }
                 }
                 else
                 {
-                    responseModel.Status = EStatus.BAD_FORMAT;
-                    responseModel.StatusCode = (double)EStatus.BAD_FORMAT;
-                    //responseModel.Payload = null;
+                    int response = context.Database.ExecuteSqlCommand(sql);
+                    if (response != 0)
+                    {
+                        responseModel.Status = EStatus.SUCCESS;
+                        responseModel.StatusCode = (double)EStatus.SUCCESS;
+                            
+                    }
+                    else
+                    {
+                        responseModel.Status = EStatus.REJECTED;
+                        responseModel.StatusCode = (double)EStatus.REJECTED;
+                    }
                 }
+                
+            }
+            catch (Exception e)
+            {
+                responseModel.Status = EStatus.REJECTED;
+                responseModel.StatusCode = (int)EStatus.REJECTED;
+                responseModel.Payload = e.Message;
             }
 
             XmlSerializer serializer = new XmlSerializer(typeof(Response));

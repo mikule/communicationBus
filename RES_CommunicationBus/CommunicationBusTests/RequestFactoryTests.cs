@@ -1,6 +1,6 @@
 ﻿using System;
 using Common.CommunicationModel;
-using Common.Helper;
+using Common.Helpers;
 using Common.Helpers;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -10,37 +10,17 @@ namespace CommunicationBusTests
     public class RequestFactoryTests
     {
         [TestMethod]
-        public void ConvertStringToRequest_MakingRequest_ReturnNotNullValue()
-        {
-            string stringRequest = "GET/resurs/1";
-
+        [DataRow("GET/resurs/1")]
+        [DataRow("GET/Resources//Name='Petar';Description='opis'/Name;Description")]
+        [DataRow("GET/Resources//Name='Petar';Description='opis'")]
+        //GET/Resources//Name='Petar';Description='opis'/Name;Description
+        //GET/Resources//Name='Petar';Description='opis'"
+        public void ConvertStringToRequest_MakingRequest_ReturnNotNullValue(string stringRequest)
+        { 
             Request request = RequestFactory.ConvertStringToRequest(stringRequest);
 
             Assert.IsNotNull(request);
-            Assert.AreEqual(request.Verb, "GET");
         }
-
-        [TestMethod]
-        public void ValidateRequest_PassTheCheck_ReturnTrue()
-        {
-            string stringRequest = "POST/resurs/1";
-            var validation = new ValidationOfRequest();
-
-            var result = validation.ValidateRequest(stringRequest);
-
-            Assert.IsTrue(result);
-        }
-
-
-        [TestMethod]
-        public void ValidateRequest_PassTheCheck_ReturnFalse()
-        {
-            string stringRequest = "POSfsdghT/resurs/1";
-            var validation = new ValidationOfRequest();
-
-            var result = validation.ValidateRequest(stringRequest);
-
-            Assert.IsFalse(result);
-        }
-    }
+       
+    } 
 }
